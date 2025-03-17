@@ -1,0 +1,30 @@
+class Solution {
+    public int TotalPairs(int[] nums, int k) {
+        // Code here
+        if (k < 0) 
+        return 0; // Difference cannot be negative
+        
+        Map<Integer, Integer> freq = new HashMap<>();
+        int count = 0;
+
+        // Store frequencies of elements
+        for (int num : nums) {
+            freq.put(num, freq.getOrDefault(num, 0) + 1);
+        }
+
+        // Count valid pairs
+        for (int num : freq.keySet()) {
+            if (k == 0) {
+                // Count elements appearing at least twice
+                if (freq.get(num) > 1) 
+                count++;
+            } else {
+                // Check if num + k exists
+                if (freq.containsKey(num + k)) 
+                count++;
+            }
+        }
+        
+        return count;
+    }
+}

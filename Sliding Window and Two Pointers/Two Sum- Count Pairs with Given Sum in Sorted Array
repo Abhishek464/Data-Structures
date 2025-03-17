@@ -43,6 +43,6 @@ class GFG{
                     res += (cnt1 * cnt2);
             }
         }
-    return res;
+        return res;
     }
 }

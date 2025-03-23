@@ -1,0 +1,22 @@
+class Solution {
+    public int pivotInteger(int n) {
+        int expectedSum = n * (n + 1) / 2;
+        int left = 1;
+        int right = n;
+
+        while (left <= right) {
+            int num = (left + right) / 2;
+            int pivotSum = num * (num + 1) / 2;
+            int temp = expectedSum - pivotSum + num;
+
+            if (pivotSum == temp) 
+            return num;
+            else if (pivotSum > temp) 
+            right = num - 1;
+            else 
+            left = num + 1;
+        }
+
+        return -1;
+    }
+}

@@ -1,0 +1,68 @@
+class Solution {
+     boolean isLeaf(Node node) {
+        return node.left == null && node.right == null;
+    }
+
+    // Function to collect left boundary nodes
+    // (top-down order)
+     void collectBoundaryLeft(Node root, ArrayList<Integer> res) {
+        if (root == null || isLeaf(root))
+            return;
+
+        res.add(root.data);
+        if (root.left != null)
+            collectBoundaryLeft(root.left, res);
+        else if (root.right != null)
+            collectBoundaryLeft(root.right, res);
+    }
+
+    // Function to collect all leaf nodes
+     void collectLeaves(Node root, ArrayList<Integer> res) {
+        if (root == null)
+            return;
+
+        if (isLeaf(root)) {
+            res.add(root.data);
+            return;
+        }
+
+        collectLeaves(root.left, res);
+        collectLeaves(root.right, res);
+    }
+
+    // Function to collect right boundary nodes
+    // (bottom-up order)
+     void collectBoundaryRight(Node root, ArrayList<Integer> res) {
+        if (root == null || isLeaf(root))
+            return;
+
+        if (root.right != null)
+            collectBoundaryRight(root.right, res);
+        else if (root.left != null)
+            collectBoundaryRight(root.left, res);
+
+        res.add(root.data);
+    }
+    ArrayList<Integer> boundaryTraversal(Node node) {
+        // code here
+        ArrayList<Integer> res = new ArrayList<>();
+
+        if (node == null)
+            return res;
+
+        // Add root data if it's not a leaf
+        if (!isLeaf(node))
+            res.add(node.data);
+
+        // Collect left boundary
+        collectBoundaryLeft(node.left, res);
+
+        // Collect leaf nodes
+        collectLeaves(node, res);
+
+        // Collect right boundary
+        collectBoundaryRight(node.right, res);
+
+        return res;
+    }
+}

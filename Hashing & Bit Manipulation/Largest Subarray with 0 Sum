@@ -1,0 +1,38 @@
+class Solution {
+    int maxLen(int arr[]) {
+        // code here
+        HashMap<Integer, Integer> presum = new HashMap<>();
+
+        int sum = 0;
+        int max_len = 0;
+
+        // Traverse through the given array
+        for (int i = 0; i < arr.length; i++) {
+
+            // Add current element to sum
+            sum += arr[i];
+
+            // If the sum is 0, update max_len
+            if (sum == 0) {
+                max_len = i + 1;
+            }
+
+            // Check if this sum is seen before
+            if (presum.containsKey(sum)) {
+
+                // If this sum is seen before, update
+                // max_len
+                max_len = Math.max(max_len,
+                                   i - presum.get(sum));
+            }
+            else {
+
+                // If this sum is not seen before, add it to
+                // the map
+                presum.put(sum, i);
+            }
+        }
+
+        return max_len;
+    }
+}

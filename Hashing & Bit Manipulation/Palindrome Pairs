@@ -1,0 +1,45 @@
+public class Solution {
+    public List<List<Integer>> palindromePairs(String[] words) {
+        List<List<Integer>> result = new ArrayList<>();
+        Map<String, Integer> wordMap = new HashMap<>();
+        
+        // Step 1: Store reversed words in the HashMap
+        for (int i = 0; i < words.length; i++) {
+            wordMap.put(new StringBuilder(words[i]).reverse().toString(), i);
+        }
+        
+        // Step 2: Check for palindrome pairs
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            int wordLen = word.length();
+            for (int j = 0; j <= wordLen; j++) {
+                String prefix = word.substring(0, j);
+                String suffix = word.substring(j);
+                
+                // Check if prefix is a palindrome and reversed suffix exists in the map
+                if (isPalindrome(prefix) && wordMap.containsKey(suffix) && wordMap.get(suffix) != i) {
+                    result.add(List.of(wordMap.get(suffix), i));
+                }
+                
+                // Check if suffix is a palindrome and reversed prefix exists in the map
+                if (j != wordLen && isPalindrome(suffix) && wordMap.containsKey(prefix) && wordMap.get(prefix) != i) {
+                    result.add(List.of(i, wordMap.get(prefix)));
+                }
+            }
+        }
+        
+        return result;
+    }
+
+    private boolean isPalindrome(String s) {
+        int left = 0, right = s.length() - 1;
+        while (left < right) {
+            if (s.charAt(left) != s.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+}

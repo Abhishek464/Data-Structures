@@ -1,0 +1,59 @@
+class Solution {
+    public int largestIsland(int[][] grid) {
+        int n = grid.length;
+        int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        Map<Integer, Integer> islandSizes = new HashMap<>();
+        int islandId = 2; // Start IDs from 2 since 0 and 1 are used in the grid
+
+        // Step 1: DFS to mark islands and calculate their sizes
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    int size = dfs(grid, i, j, islandId, directions);
+                    islandSizes.put(islandId, size);
+                    islandId++;
+                }
+            }
+        }
+
+        int maxSize = islandSizes.values().stream().max(Integer::compare).orElse(0);
+
+        // Step 2: Evaluate each '0' to maximize the island size
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 0) {
+                    Set<Integer> seenIslands = new HashSet<>();
+                    int potentialSize = 1; // Changing current '0' to '1'
+
+                    for (int[] dir : directions) {
+                        int x = i + dir[0];
+                        int y = j + dir[1];
+                        if (x >= 0 && y >= 0 && x < n && y < n && grid[x][y] > 1) {
+                            int adjacentIslandId = grid[x][y];
+                            if (!seenIslands.contains(adjacentIslandId)) {
+                                potentialSize += islandSizes.get(adjacentIslandId);
+                                seenIslands.add(adjacentIslandId);
+                            }
+                        }
+                    }
+                    maxSize = Math.max(maxSize, potentialSize);
+                }
+            }
+        }
+
+        return maxSize;
+    }
+
+    private int dfs(int[][] grid, int i, int j, int islandId, int[][] directions) {
+        int n = grid.length;
+        if (i < 0 || j < 0 || i >= n || j >= n || grid[i][j] != 1) return 0;
+        grid[i][j] = islandId;
+        int size = 1;
+
+        for (int[] dir : directions) {
+            size += dfs(grid, i + dir[0], j + dir[1], islandId, directions);
+        }
+
+        return size;
+    }
+}

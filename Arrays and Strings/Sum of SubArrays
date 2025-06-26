@@ -1,0 +1,15 @@
+class Solution {
+    public long subarraySum(int[] arr) {
+        int n = arr.length;
+        long p = 1_000_000_007L, sum = 0;
+
+        // Iterating over the array
+        for (int i = 0; i < n; i++) {
+            // Calculating the sum of products for each subarray
+            sum = (sum + ((1L * (((i + 1) * 1L * arr[i]) % p) * (n - i)) % p)) % p;
+        }
+
+        // Returning the final sum
+        return sum;
+    }
+}
